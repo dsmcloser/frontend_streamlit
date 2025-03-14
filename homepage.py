@@ -74,41 +74,41 @@ if st.button("Local Upload", use_container_width=True):
     st.switch_page("pages/code_migration.py")
 
 
-if "initial_code" not in st.session_state:
-    st.session_state.initial_code = "print('Hello, world!')"
-
-list = [1]
-
-button_save = [{
-    "name": "Save changes",
-    "feather": "Save",
-    "primary": "true",
-    "hasText": "true",
-    "showWithIcon": "true",
-    "commands": ["submit"],
-    "alwaysOn": True,
-    "style": {
-            "bottom": "0.40rem",
-            "right": "0.3rem"
-    }
-}]
-
-# Store editor content in session state
-if 'editor_content' not in st.session_state:
-    st.session_state.editor_content = st.session_state.initial_code
-
-updated_code = code_editor(st.session_state.editor_content, lang="python",
-                           theme="dark", buttons=button_save)
-
-# Only update when save button is pressed
-if updated_code['type'] == 'submit':
-    st.session_state.editor_content = updated_code['text']
-    if updated_code['text'] != st.session_state.initial_code:
-        list[-1] = updated_code['text']
-        st.write("The code has been modified!")
-        st.write(updated_code['text'])
-        st.write(f"This is {list}")
-    else:
-        st.write("No changes detected.")
-        st.write(updated_code['text'])
-        st.write(f"This is {list}")
+# if "initial_code" not in st.session_state:
+#     st.session_state.initial_code = "print('Hello, world!')"
+#
+# list = [1]
+#
+# button_save = [{
+#     "name": "Save changes",
+#     "feather": "Save",
+#     "primary": "true",
+#     "hasText": "true",
+#     "showWithIcon": "true",
+#     "commands": ["submit"],
+#     "alwaysOn": True,
+#     "style": {
+#             "bottom": "0.40rem",
+#             "right": "0.3rem"
+#     }
+# }]
+#
+# # Store editor content in session state
+# if 'editor_content' not in st.session_state:
+#     st.session_state.editor_content = st.session_state.initial_code
+#
+# updated_code = code_editor(st.session_state.editor_content, lang="python",
+#                            theme="dark", buttons=button_save)
+#
+# # Only update when save button is pressed
+# if updated_code['type'] == 'submit':
+#     st.session_state.editor_content = updated_code['text']
+#     if updated_code['text'] != st.session_state.initial_code:
+#         list[-1] = updated_code['text']
+#         st.write("The code has been modified!")
+#         st.write(updated_code['text'])
+#         st.write(f"This is {list}")
+#     else:
+#         st.write("No changes detected.")
+#         st.write(updated_code['text'])
+#         st.write(f"This is {list}")

@@ -16,10 +16,20 @@ if "object" not in st.session_state:
     time.sleep(2)
     st.switch_page("homepage.py")
 
-# Make sure the button is initially working
-st.session_state.prev_button_disabled = False
+# Button disabling management ##############################################
+
 # Make sure the button is initially working
 st.session_state.next_button_disabled = False
+
+# Make sure the button is initially not working
+# (when you are in the first file you can't go back)
+st.session_state.prev_button_disabled = True
+
+# Make sure the button is initially not working
+# (before the user clicks the migrate button it should be impossible to move on)
+st.session_state.complete_button_disabled = True
+
+###############################################################################
 
 # Make sure that the branch is reset to default incase user goes back
 # from the final comparison page
@@ -275,7 +285,8 @@ with st.container():
             edited_code = code_editor(st.session_state.editor_content, lang="python",
                                       theme="dark", buttons=button_save)
 
-            st.write(edited_code)
+            # st.write(edited_code)
+
             # Only update when save button is pressed
             if edited_code['type'] == 'submit':
                 st.session_state.editor_content = edited_code['text']
@@ -329,12 +340,16 @@ with st.container():
 
 
 # Manage button activation
-# The Complete button does not need a specific session_state
-# because it is always the 'seen_all' value flipped to
-# either False or True
 seen_all = (st.session_state.current_file == len(
     st.session_state.selected_files) - 1)
-first_one = (st.session_state.current_file == 0)
+first_one = (st.session_state.current_file == 0) or (
+    len(st.session_state.selected_files) == 1)
+completed = (len(st.session_state.to_upload) == len(
+    st.session_state.selected_files)
+)
+
+if completed:
+    st.session_state.complete_button_disabled = False
 if seen_all:
     st.session_state.next_button_disabled = True
 elif first_one:
@@ -364,7 +379,6 @@ with button_2:
             st.warning("This is the last file, confirm below to proceed")
         else:
             st.session_state.current_file += 1
-            st.session_state.button_disabled = False
             # Makes sure the code is visible after migration of the current
             # code deployment, avoiding showing the last result from the last file
             if 'result' in st.session_state:
@@ -374,7 +388,7 @@ with button_2:
         st.rerun()
 
 with button_3:
-    if st.button("✅ Complete migration", disabled=not st.session_state.next_button_disabled, use_container_width=True):
+    if st.button("✅ Complete migration", disabled=st.session_state.complete_button_disabled, use_container_width=True):
         # Uploads the results to the repo
         with st.spinner("Uploading the results...", show_time=True):
             st.session_state.object.upload_file(
