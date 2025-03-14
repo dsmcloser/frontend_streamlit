@@ -281,13 +281,17 @@ with st.container():
                 st.session_state.editor_content = edited_code['text']
                 if edited_code['text'] != st.session_state.initial_code:
                     st.session_state.to_upload[-1]['content'] = edited_code['text']
-                    st.write("The code has been modified!")
-                    st.write(edited_code['text'] ==
-                             st.session_state.to_upload[-1]['content'])
+                    st.write("The initial code has been modified!")
+                    # st.write(edited_code['text'] ==
+                    #         st.session_state.to_upload[-1]['content'])
                 else:
                     st.write("No changes detected.")
-                    st.write(edited_code['text'] ==
-                             st.session_state.to_upload[-1]['content'])
+                    # st.write(edited_code['text'] ==
+                    #         st.session_state.to_upload[-1]['content'])
+
+            # Otherwise if the user clicks twice on the save button
+            # it will clear all the content
+            del st.session_state.editor_content
 
 # container_code_editor = st.container(border=False)
 # with container_code_editor:
