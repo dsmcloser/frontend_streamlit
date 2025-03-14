@@ -70,8 +70,8 @@ if len(token) > 0:
 # Spacer
 st.write("")
 
-if st.button("Local Upload", use_container_width=True):
-    st.switch_page("pages/code_migration.py")
+if st.button("Local Upload (Without Github)", use_container_width=True):
+    st.switch_page("pages/no_github_approach.py")
 
 
 # if "initial_code" not in st.session_state:
