@@ -260,8 +260,11 @@ if "result" in st.session_state:
 #######################################################################################################
 #######################################################################################################
 
+# st.write(st.session_state.to_upload)
+
 with st.container():
-    if len(st.session_state.to_upload) != 0:
+    if "result" in st.session_state:
+        # if len(st.session_state.to_upload) != 0:
         with st.expander(f"**Edit code for {uploaded_file['path']}**"):
 
             button_save = [{
@@ -348,12 +351,33 @@ completed = (len(st.session_state.to_upload) == len(
     st.session_state.selected_files)
 )
 
-if completed:
-    st.session_state.complete_button_disabled = False
-if seen_all:
-    st.session_state.next_button_disabled = True
-elif first_one:
-    st.session_state.prev_button_disabled = True
+# Helps the user to not click buttons when not mean to do it
+# and ensures that to proceed there has to be a migrated version
+# for each file selected
+
+
+def button_management():
+    # Handle when there is only one file
+    if len(st.session_state.selected_files) == 1:
+        st.session_state.next_button_disabled = True
+        st.session_state.prev_button_disabled = True
+
+    else:
+        if seen_all:
+            st.session_state.next_button_disabled = True
+            st.session_state.prev_button_disabled = False
+
+        if first_one:
+            st.session_state.prev_button_disabled = True
+            st.session_state.next_button_disabled = False
+
+    if completed:
+        st.session_state.complete_button_disabled = False
+    else:
+        st.session_state.complete_button_disabled = True
+
+
+button_management()
 
 button_1, button_2, button_3 = st.columns(
     [2, 2, 2])  # Adjust width if needed
